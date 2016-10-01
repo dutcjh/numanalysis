@@ -1,3 +1,4 @@
+%% jacobi 迭代法
 function x = fjacobi2(A,b,x0,e0,Nmax,varargin)
 %% jacobi 迭代法
 % x0为初始迭代值，e0为最大允许误差，Nmax为最大迭代次数

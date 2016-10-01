@@ -6,6 +6,7 @@ w = 1.2;
 e0 = 1e-4;
 Nmax = 1000;
 x0 = zeros(10,1);
+%% ²âÊÔÈë¿Ú
 if test == 0
     x = fjacobi(A,b,x0,e0,Nmax)
 elseif test == 1

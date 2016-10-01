@@ -1,4 +1,4 @@
-function x = fjacobi(A,b,x0,e0,Nmax,varargin)
+function x = fjacobi2(A,b,x0,e0,Nmax,varargin)
 %% jacobi 迭代法
 % x0为初始迭代值，e0为最大允许误差，Nmax为最大迭代次数
 n = length(A);
@@ -16,23 +16,25 @@ elseif nargin == 3  %如果输入了3个参数
 elseif nargin == 4  %如果输入了4个参数
     Nmax = 100;
 end
-I = eye(n);
-D = diag(diag(A));
-B = I - D\A;
-g = D\b;
-xk1=x0;
-n = 0;
-while n < Nmax  %迭代次数上限
-    xk = xk1;
-    xk1 = B*xk+g;
-    if max(abs(xk1-xk))<e0
-        break;
+x = x0;
+for i = 1 : Nmax
+    for j = 1 : n
+        s = 0;
+        for k = 1 : n
+            if k ~= j
+                s = s + A(j,k)*x0(k);
+            end
+        end
+        x(j) = (b(j)-s)/A(j,j);
     end
-    n = n+1;
+    if norm((x-x0),inf) < e0
+        i = i-1;
+        break
+    end
+    x0 = x;
 end
-if n >= Nmax
+if i == Nmax
     disp('超过迭代次数，可能不收敛！');
 end
-disp(strcat('n = ',num2str(n)));
-x = xk1;
+disp(strcat('n = ',num2str(i)));
 

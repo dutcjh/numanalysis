@@ -1,4 +1,4 @@
-function x = fsor(A,b,x0,e0,w,Nmax,varargin)
+function x = fsor2(A,b,x0,e0,w,Nmax,varargin)
 %% SOR（逐次超松弛迭代法）
 % x0为初始迭代值，e0为最大允许误差，Nmax为最大迭代次数
 n = length(A);
@@ -21,26 +21,25 @@ elseif nargin == 4 %如果输入了4个参数
 elseif nargin == 5 %如果输入了5个参数
     Nmax = 100;
 end
-D = diag(diag(A));
-L = triu(A)-A;
-U = tril(A)-A;
-M = D./w-L;
-N = (1/w-1).*D+U;
-B = M\N;
-g = M\b;
-xk1=x0;
-n = 0;
-while n < Nmax
-    xk = xk1;
-    xk1 = B*xk+g;
-    if norm((xk1-xk),inf)<e0
-        break;
+x = x0;
+for k = 1 : Nmax
+    for j = 1 : n
+        if j == 1
+            x(1) = (1-w)*x0(1) + w*(b(1) - A(1,2:n)*x0(2:n))/A(1,1);
+        elseif j == n
+            x(n) = (1-w)*x0(n) + w*(b(n) - A(n,1:n-1)*(x(1:n-1)))/A(n,n);
+        else
+            x(j) = (1-w)*x0(j) + w*(b(j) - A(j,1:j-1)*(x(1:j-1))-A(j,j+1:n)*x0(j+1:n))/A(j,j);
+        end
     end
-    n = n+1;
+    if norm((x-x0),inf) < e0 
+        k = k-1;
+        break
+    end
+    x0 = x;
 end
-if n >= Nmax
+if k == Nmax
     disp('超过迭代次数，可能不收敛！');
 end
-disp(strcat('n = ',num2str(n)));
-x = xk1;
+disp(strcat('n = ',num2str(k)));
 

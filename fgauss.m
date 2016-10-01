@@ -21,16 +21,18 @@ L = triu(A)-A;
 U = tril(A)-A;
 B = (D-L)\U;
 g = (D-L)\b;
-xk=x0;
-n = 1;
-xk1 = B*xk+g;
+xk1=x0;
+n = 0;
 while n < Nmax
     xk = xk1;
-    n = n+1;
     xk1 = B*xk+g;
-    if max(abs(xk1-xk))<e0
+    if norm((xk1-xk),inf)<e0
         break;
     end
+    n = n+1;
 end
-disp(strcat('n=',num2str(n)));
+if n >= Nmax
+    disp('超过迭代次数，可能不收敛！');
+end
+disp(strcat('n = ',num2str(n)));
 x = xk1;

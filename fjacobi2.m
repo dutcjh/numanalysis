@@ -3,6 +3,20 @@ function x = fjacobi2(A,b,x0,e0,Nmax,varargin)
 %% jacobi 迭代法
 % x0为初始迭代值，e0为最大允许误差，Nmax为最大迭代次数
 n = length(A);
+% if nargin < 5
+%     Nmax = 100;
+%     if nargin < 4
+%         e0 = 1e-2;
+%         if nargin < 3
+%             x0 = zeros(n,1);
+%             if nargin < 2
+%                 disp('输入参数太少！');
+%                 x = 0;
+%                 return;
+%             end
+%         end
+%     end
+% end
 if nargin < 2
     disp('输入参数太少！');
     x = 0;
